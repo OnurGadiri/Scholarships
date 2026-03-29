@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="utf-8">
+  <title>Profil</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <nav class="topnav">
+    <a href="{% url 'scholarship_list' %}">Kataloq</a>
+    <form action="{% url 'logout' %}" method="post" class="inline-form">
+      {% csrf_token %}
+      <button type="submit" class="linkbtn">Çıxış</button>
+    </form>
+  </nav>
+
+  <div class="form-wrap">
+    <h1>Profil</h1>
+    <p class="hint">Sahə və hədəf ölkəni yeniləyə bilərsən; sonra kataloqda sənə uyğun filtr əlavə edəcəyik.</p>
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="{{ form.field_of_study.id_for_label }}">Təhsil sahəsi</label>
+        {{ form.field_of_study }}
+        {% for e in form.field_of_study.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.target_country.id_for_label }}">Hədəf ölkə</label>
+        {{ form.target_country }}
+        {% for e in form.target_country.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+
+      <button type="submit" class="btn">Yadda saxla</button>
+    </form>
+  </div>
+</body>
+</html>

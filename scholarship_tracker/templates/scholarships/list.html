@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Scholarships</title>
+    {%load static%}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">  
+  </head>
+  <body>
+    <nav class="topnav">
+      <a href="{% url 'scholarship_list' %}">Kataloq</a>
+      {% if user.is_authenticated %}
+        <span class="navhi">{{ user.username }}</span>
+        <a href="{% url 'profile_edit' %}">Profil</a>
+        <form action="{% url 'logout' %}" method="post" class="inline-form">
+          {% csrf_token %}
+          <button type="submit" class="linkbtn">Çıxış</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Giriş</a>
+        <a href="{% url 'register' %}">Qeydiyyat</a>
+      {% endif %}
+    </nav>
+    <h1>Scholarship Catalog</h1>
+    <form method="get" class="filter-bar">
+      <input
+        type="text"
+        name="q"
+        placeholder="Ad üzrə axtar..."
+        value="{{ q }}"
+      />
+      <select name="country">
+        <option value="">Bütün ölkələr</option>
+        {% for c in countries %}
+          <option value="{{ c }}" {% if c == selected_country %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Axtar</button>
+    </form>
+    <div class="grid">
+      {% for item in items %}
+        {% with s=item.obj %}
+          <div class="card">
+            <div class="title">{{ s.name }}</div>
+            <div class="meta">
+              {{ s.country }} · {{ s.field_of_study }} · {{ s.language_requirement }}
+            </div>
+            <div class="meta">
+              Funding: {{ s.funding_amount }}
+            </div>
+            <div class="meta">
+              Deadline: {{ s.deadline }}
+              {% if item.badge_color == "red" %}
+                <span class="badge badge-red">{{ item.days_left }} gün qalıb</span>
+              {% elif item.badge_color == "orange" %}
+                <span class="badge badge-orange">{{ item.days_left }} gün qalıb</span>
+              {% else %}
+                <span class="badge badge-green">{{ item.days_left }} gün qalıb</span>
+              {% endif %}
+            </div>
+            <div class="link">
+              <a href="{{ s.application_link }}" target="_blank">Rəsmi müraciət linki</a>
+            </div>
+          </div>
+        {% endwith %}
+      {% empty %}
+        <p>Hələ heç bir təqaüd yoxdur.</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>
