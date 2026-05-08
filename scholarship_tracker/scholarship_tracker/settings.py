@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scholarships',
     'accounts.apps.AccountsConfig',
+    'watchlist',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,5 @@ STATICFILES_DIRS=[BASE_DIR/"static"]
 LOGIN_REDIRECT_URL="/scholarships/"
 LOGOUT_REDIRECT_URL="/scholarships/"
 LOGIN_URL = "/accounts/login/"
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

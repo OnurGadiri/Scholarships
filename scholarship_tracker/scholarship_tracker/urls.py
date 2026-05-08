@@ -22,5 +22,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("",RedirectView.as_view(pattern_name="scholarship_list", permanent=False),name="home",),
     path("scholarships/", include("scholarships.urls")),
+    path("watchlist/", include("watchlist.urls")),
     path("accounts/", include("accounts.urls")),
 ]

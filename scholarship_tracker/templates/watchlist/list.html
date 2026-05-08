@@ -2,15 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Scholarships</title>
-    {%load static%}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">  
+    <title>SavedList</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
   <body>
     <nav class="topnav">
       <a href="{% url 'scholarship_list' %}">Home Page</a>
+      <a href="{% url 'watchlist_list' %}">Saved</a>
       {% if user.is_authenticated %}
-        <a href="{% url 'watchlist_list' %}">Saved</a>
         <span class="navhi">{{ user.username }}</span>
         <a href="{% url 'profile_edit' %}">Profil</a>
         <form action="{% url 'logout' %}" method="post" class="inline-form">
@@ -22,22 +22,8 @@
         <a href="{% url 'register' %}">Qeydiyyat</a>
       {% endif %}
     </nav>
-    <h1>Scholarship Catalog</h1>
-    <form method="get" class="filter-bar">
-      <input
-        type="text"
-        name="q"
-        placeholder="Ad üzrə axtar..."
-        value="{{ q }}"
-      />
-      <select name="country">
-        <option value="">Bütün ölkələr</option>
-        {% for c in countries %}
-          <option value="{{ c }}" {% if c == selected_country %}selected{% endif %}>{{ c }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Axtar</button>
-    </form>
+    <h1>Saved List</h1>
+    <p class="meta">Burada yadda saxladığınız təqaüdlər göstərilir.</p>
     <div class="grid">
       {% for item in items %}
         {% with s=item.obj %}
@@ -62,25 +48,15 @@
             <div class="link">
               <a href="{{ s.application_link }}" target="_blank">Rəsmi müraciət linki</a>
             </div>
-            {% if user.is_authenticated %}
-              {% if s.id in saved_ids %}
-                <form action="{% url 'watchlist_remove' %}" method="post" class="inline-form">
-                  {% csrf_token %}
-                  <input type="hidden" name="scholarship_id" value="{{ s.id }}">
-                  <button type="submit" class="linkbtn">Siyahıdan çıxar</button>
-                </form>
-              {% else %}
-                <form action="{% url 'watchlist_add' %}" method="post" class="inline-form">
-                  {% csrf_token %}
-                  <input type="hidden" name="scholarship_id" value="{{ s.id }}">
-                  <button type="submit" class="linkbtn">Yadda saxla</button>
-                </form>
-              {% endif %}
-            {% endif %}
+            <form action="{% url 'watchlist_remove' %}" method="post" class="inline-form">
+              {% csrf_token %}
+              <input type="hidden" name="scholarship_id" value="{{ s.id }}">
+              <button type="submit" class="linkbtn">Siyahıdan çıxar</button>
+            </form>
           </div>
         {% endwith %}
       {% empty %}
-        <p>Hələ heç bir təqaüd yoxdur.</p>
+        <p>Hələ heç bir təqaüd əlavə etməmisiniz. <a href="{% url 'scholarship_list' %}">Kataloqa keç</a></p>
       {% endfor %}
     </div>
   </body>

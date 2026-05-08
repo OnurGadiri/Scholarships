@@ -55,3 +55,4 @@ class UserProfileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for f in self.fields.values():
             f.widget.attrs.setdefault("class", "inp")
+    
